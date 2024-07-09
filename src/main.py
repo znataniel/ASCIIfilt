@@ -14,6 +14,13 @@ def rgb_to_grayscale(pixels):
     return gs_pixels
 
 
+def side_by_side(im_1, im_2, gap=20):
+    sbs = Image.new("RGB", (im_1.size[0] + im_2.size[0] + gap, im_1.size[0]))
+    sbs.paste(im_1)
+    sbs.paste(im_2, (im_1.size[0] + gap, 0))
+    return sbs
+
+
 def main():
     im = Image.open("assets/funny_dog.jpg")
     size = im.size
@@ -25,7 +32,7 @@ def main():
 
     gs = Image.fromarray(np.array(gs_pixels, dtype=np.uint8), "L")
 
-    gs.show()
+    side_by_side(im, gs).show()
 
 
 if __name__ == "__main__":
