@@ -1,3 +1,9 @@
+# TO DO
+# 1. improve lower brightness contrast
+# 2. render the ascii output to an image
+# 3. refactor & modularize
+# 4. implement my own resize function
+
 from PIL import Image
 import numpy as np
 
@@ -11,8 +17,21 @@ def rgb_to_grayscale(pixels):
     return [[pixel_rgb_to_gray(t) for t in col] for col in pixels]
 
 
+def grayscale_to_3bit(pixels):
+    # This vvvvvvv version returns a pixel grid with the 8 quantized values
+    # return [[(32 * (i // 32)) for i in col] for col in pixels]
+
+    # This one just returns the index 0-7 from darkest to brightest
+    return [[int(i // 32) for i in col] for col in pixels]
+
+
+def quantized_to_ascii(pixels):
+    chars = [" ", ",", ";", "l", "O", "#", "W", "M"]
+    return [[chars[i] for i in col] for col in pixels]
+
+
 def side_by_side(im_1, im_2, gap=20):
-    sbs = Image.new("RGB", (im_1.size[1], im_1.size[1] + im_2.size[1] + gap))
+    sbs = Image.new("RGB", (im_1.size[0], im_1.size[1] + im_2.size[1] + gap))
     sbs.paste(im_1)
     sbs.paste(im_2, (0, im_1.size[1] + gap))
     return sbs
@@ -20,6 +39,7 @@ def side_by_side(im_1, im_2, gap=20):
 
 def main():
     im = Image.open("assets/in.jpg")
+    im = im.resize((im.size[0] // 8, im.size[1] // 8))
     size = im.size
 
     # each sublist is a column
@@ -27,9 +47,15 @@ def main():
 
     gs_pixels = rgb_to_grayscale(rgb_pixels)
 
-    gs = Image.fromarray(np.array(gs_pixels, dtype=np.uint8))
+    q_pixels = grayscale_to_3bit(gs_pixels)
 
-    side_by_side(im, gs).save("assets/out.jpg")
+    a_pixels = quantized_to_ascii(q_pixels)
+
+    with open("test.txt", "w") as f:
+        for i in range(len(a_pixels)):
+            for j in range(len(a_pixels[0])):
+                f.write(a_pixels[i][j])
+            f.write("\n")
 
 
 if __name__ == "__main__":
