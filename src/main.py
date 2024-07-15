@@ -1,11 +1,10 @@
 # TO DO
-# 1. improve lower brightness contrast
-# 2. render the ascii output to an image
-# 3. refactor & modularize
-# 4. implement my own resize function
+# improve lower brightness contrast
+# refactor & modularize
+# implement my own resize function
 
 from PIL import Image
-import numpy as np
+from text_output import ascii_to_image as asciitoi
 
 
 # To convert RGB to 8 bit gamma:
@@ -51,11 +50,7 @@ def main():
 
     a_pixels = quantized_to_ascii(q_pixels)
 
-    with open("test.txt", "w") as f:
-        for i in range(len(a_pixels)):
-            for j in range(len(a_pixels[0])):
-                f.write(a_pixels[i][j])
-            f.write("\n")
+    side_by_side(Image.open("assets/in.jpg"), asciitoi(a_pixels)).save("assets/out.jpg")
 
 
 if __name__ == "__main__":
