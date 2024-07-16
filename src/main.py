@@ -5,7 +5,7 @@
 #   resize images such that the width fits in a regular column of text (~80 characters)
 
 from PIL import Image
-from text_output import ascii_to_image as asciitoi
+from conversion import ascii_to_image as asciitoi
 from sys import argv
 
 
@@ -26,9 +26,11 @@ def grayscale_to_3bit(pixels):
     return [[int(i // 32) for i in col] for col in pixels]
 
 
+# Brightest charascter -> " "
+# Darkest Character -> "M"
+# Since background is white and foreground is black
 def quantized_to_ascii(pixels):
-    chars = [" ", ",", ";", "l", "O", "#", "W", "M"]
-    # return [[chars[len(chars) - 1 - i] for i in col] for col in pixels]
+    chars = ["M", "W", "#", "O", "l", ";", ",", " "]
     return [[chars[i] for i in col] for col in pixels]
 
 
