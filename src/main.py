@@ -2,9 +2,11 @@
 # improve lower brightness contrast
 # refactor & modularize
 # implement my own resize function
+#   resize images such that the width fits in a regular column of text (~80 characters)
 
 from PIL import Image
 from text_output import ascii_to_image as asciitoi
+from sys import argv
 
 
 # To convert RGB to 8 bit gamma:
@@ -26,6 +28,7 @@ def grayscale_to_3bit(pixels):
 
 def quantized_to_ascii(pixels):
     chars = [" ", ",", ";", "l", "O", "#", "W", "M"]
+    # return [[chars[len(chars) - 1 - i] for i in col] for col in pixels]
     return [[chars[i] for i in col] for col in pixels]
 
 
@@ -37,20 +40,25 @@ def side_by_side(im_1, im_2, gap=20):
 
 
 def main():
-    im = Image.open("assets/in.jpg")
+    if len(argv) != 2:
+        print("Usage:\t asciifilt path/to/image.ext")
+        exit(1)
+
+    im = Image.open(argv[1])
     im = im.resize((im.size[0] // 8, im.size[1] // 8))
-    size = im.size
 
     # each sublist is a column
-    rgb_pixels = [[im.getpixel((i, j)) for i in range(size[0])] for j in range(size[1])]
+    rgb_pixels = [
+        [im.getpixel((i, j)) for i in range(im.size[0])] for j in range(im.size[1])
+    ]
 
-    gs_pixels = rgb_to_grayscale(rgb_pixels)
+    gs_pixels = rgb_to_grayscale(rgb_pixels) if im.mode == "RGB" else rgb_pixels
 
     q_pixels = grayscale_to_3bit(gs_pixels)
 
     a_pixels = quantized_to_ascii(q_pixels)
 
-    side_by_side(Image.open("assets/in.jpg"), asciitoi(a_pixels)).save("assets/out.jpg")
+    side_by_side(Image.open(argv[1]), asciitoi(a_pixels)).save("assets/out.jpg")
 
 
 if __name__ == "__main__":
