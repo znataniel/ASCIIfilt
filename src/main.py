@@ -10,7 +10,7 @@ import conversion as conv
 from sys import argv
 
 
-def side_by_side(im_1, im_2, gap=20):
+def side_by_side(im_1: Image.Image, im_2: Image.Image, gap=20) -> Image.Image:
     sbs = Image.new("RGB", (im_1.size[0], im_1.size[1] + im_2.size[1] + gap))
     sbs.paste(im_1)
     sbs.paste(im_2, (0, im_1.size[1] + gap))
@@ -18,7 +18,7 @@ def side_by_side(im_1, im_2, gap=20):
 
 
 # each sublist is a column
-def get_rgb_pixels(im):
+def get_rgb_pixels(im: Image.Image) -> list[list]:
     return [[im.getpixel((i, j)) for i in range(im.size[0])] for j in range(im.size[1])]
 
 
