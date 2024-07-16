@@ -3,6 +3,36 @@ import PIL.Image as Image
 import PIL.ImageDraw as ImageDraw
 
 
+# To convert RGB to 8 bit gamma:
+# gamma = 0.2126*red + 0.7152*green + 0.0722*blue
+def rgb_to_grayscale(pixels):
+    def pixel_rgb_to_gray(t):
+        return 0.2126 * t[0] + 0.7152 * t[1] + 0.0722 * t[2]
+
+    return (
+        [[pixel_rgb_to_gray(t) for t in col] for col in pixels]
+        if type(pixels[0][0]) == tuple
+        else pixels
+    )
+
+
+def grayscale_to_3bit(pixels):
+    # This vvvvvvv version returns a pixel grid with the 8 quantized values
+    # Useful for visualizing the quantization
+    # return [[(32 * (i // 32)) for i in col] for col in pixels]
+
+    # This one just returns the index 0-7 from darkest to brightest
+    return [[int(i // 32) for i in col] for col in pixels]
+
+
+# Brightest charascter -> " "
+# Darkest Character -> "M"
+# Since background is white and foreground is black
+def quantized_to_ascii(pixels):
+    chars = ["M", "W", "#", "O", "l", ";", ",", " "]
+    return [[chars[i] for i in col] for col in pixels]
+
+
 def ascii_to_image(ascii):
     font_size = 8  # pixels
     h, w = font_size * len(ascii), font_size * len(ascii[0])
