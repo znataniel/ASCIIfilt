@@ -10,10 +10,16 @@ import conversion as conv
 from sys import argv
 
 
-def side_by_side(im_1: Image.Image, im_2: Image.Image, gap=20) -> Image.Image:
-    sbs = Image.new("RGB", (im_1.size[0], im_1.size[1] + im_2.size[1] + gap))
+def side_by_side(
+    im_1: Image.Image, im_2: Image.Image, gap=20, vertical_or=True
+) -> Image.Image:
+    if vertical_or:
+        sbs = Image.new("RGB", (im_1.size[0], im_1.size[1] + im_2.size[1] + gap))
+    else:
+        sbs = Image.new("RGB", (im_1.size[0] + gap + im_2.size[0], im_1.size[1]))
+
     sbs.paste(im_1)
-    sbs.paste(im_2, (0, im_1.size[1] + gap))
+    sbs.paste(im_2, (0, im_1.size[1] + gap) if vertical_or else (im_1.size[0] + gap, 0))
     return sbs
 
 
