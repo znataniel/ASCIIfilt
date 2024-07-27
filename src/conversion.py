@@ -27,9 +27,8 @@ def grayscale_to_3bit(pixels: list[list[int]]) -> list[list[int]]:
 
 # Brightest charascter -> " "
 # Darkest Character -> "M"
-# Since background is white and foreground is black
 def quantized_to_ascii(pixels: list[list[int]]) -> list[list[str]]:
-    chars = ["M", "W", "#", "O", "l", ";", ",", " "]
+    chars = ["W", "@", "?", "o", "c", ";", ",", " "]
     return [[chars[i] for i in col] for col in pixels]
 
 
