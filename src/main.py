@@ -1,6 +1,5 @@
 # TO DO
-# improve lower brightness contrast
-# refactor & modularize
+# EDGE DETECTION!!
 # implement my own resize function
 #   resize images such that the width fits in a regular column of text (~80 characters)
 # implement some unit tests after improving some of the conversion functions
