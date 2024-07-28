@@ -1,23 +1,24 @@
-from PIL import Image
-import numpy as np
+# from PIL import Image
+# import numpy as np
 
 
 # Sobel operator
 # Receives grayscale pixel image data
 # Returns edge detected pixel data
 def sobel(im: list[list]) -> list[list]:
+    # gy = [
+    # [-1, -2, -1],
+    # [0, 0, 0],
+    # [1, 2, 1],
+    # ]
+
     gx = [
         [-1, 0, 1],
         [-2, 0, 2],
         [-1, 0, 1],
     ]
 
-    gy = [
-        [1, 2, 1],
-        [0, 0, 0],
-        [-1, -2, -1],
-    ]
-    pass
+    return convolution_2d(im, gx)
 
     # im[row][column/pixel] === a_ij (like algebra matrix)
     # im = [
@@ -29,10 +30,10 @@ def sobel(im: list[list]) -> list[list]:
     # ]
 
 
-def convolution_2d(im: list[list], k: list[list]):
+def convolution_2d(im: list[list], k: list[list]) -> list[list]:
     # Kernel is assumed to be a square, odd side matrix
     k_dim = len(k) // 2
-    res = [[]]
+    res = im.copy()
     for i in range(len(im)):
         for j in range(len(im[0])):
             # vvvvvv this works because the kernel
@@ -40,6 +41,7 @@ def convolution_2d(im: list[list], k: list[list]):
             pixel = 0
             for a in range(-k_dim, k_dim + 1):
                 for b in range(-k_dim, k_dim + 1):
-                    pixel += im[i + a][j + b] * k[a + k_dim][b + k_dim]
-            res[i][j] = pixel // len(k) ** 2
+                    if i + a in range(0, len(im)) and j + b in range(0, len(im[0])):
+                        pixel += im[i + a][j + b] * k[a + k_dim][b + k_dim]
+            res[i][j] = pixel // (len(k) ** 2)
     return res

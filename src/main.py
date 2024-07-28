@@ -7,6 +7,8 @@
 from PIL import Image
 import conversion as conv
 from sys import argv
+from edge_detection import sobel
+import numpy as np
 
 
 def side_by_side(
@@ -33,15 +35,18 @@ def main():
         exit(1)
 
     im = Image.open(argv[1])
-    im = im.resize((im.size[0] // 8, im.size[1] // 8))
+    # im = im.resize((im.size[0] // 8, im.size[1] // 8))
 
-    ascii_im = conv.ascii_to_image(
-        conv.quantized_to_ascii(
-            conv.grayscale_to_3bit(conv.rgb_to_grayscale(get_rgb_pixels(im)))
-        )
-    )
+    #    ascii_im = conv.ascii_to_image(
+    #        conv.quantized_to_ascii(
+    #            conv.grayscale_to_3bit(conv.rgb_to_grayscale(get_rgb_pixels(im)))
+    #        )
+    #    )
 
-    side_by_side(Image.open(argv[1]), ascii_im).save("assets/out.jpg")
+    edges = Image.fromarray(np.array(sobel(conv.rgb_to_grayscale(get_rgb_pixels(im)))))
+
+    side_by_side(Image.open(argv[1]), edges).save("assets/out.jpg")
+    # side_by_side(Image.open(argv[1]), ascii_im).save("assets/out.jpg")
 
 
 if __name__ == "__main__":
