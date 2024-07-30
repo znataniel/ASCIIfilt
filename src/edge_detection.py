@@ -33,7 +33,7 @@ def sobel(im: list[list]) -> list[list]:
 def convolution_2d(im: list[list], k: list[list]) -> list[list]:
     # Kernel is assumed to be a square, odd side matrix
     k_dim = len(k) // 2
-    res = im.copy()
+    res = [[0] * len(im[0])] * len(im)
     for i in range(len(im)):
         for j in range(len(im[0])):
             # vvvvvv this works because the kernel
@@ -43,5 +43,5 @@ def convolution_2d(im: list[list], k: list[list]) -> list[list]:
                 for b in range(-k_dim, k_dim + 1):
                     if i + a in range(0, len(im)) and j + b in range(0, len(im[0])):
                         pixel += im[i + a][j + b] * k[a + k_dim][b + k_dim]
-            res[i][j] = pixel // (len(k) ** 2)
+            res[i][j] = pixel
     return res
