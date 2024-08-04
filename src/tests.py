@@ -62,30 +62,6 @@ class TestConvolutionMatrix(unittest.TestCase):
         ]
         self.assertEqual(ed.convolution_2d(im, w), res)
 
-    #
-    # def test_2d_conv(self):
-    # gx = [
-    # [-1, 0, 1],
-    # [-2, 0, 2],
-    # [-1, 0, 1],
-    # ]
-    #
-    # im = [
-    # [10, 10, 100, 100],
-    # [10, 10, 100, 100],
-    # [10, 10, 100, 100],
-    # [10, 10, 100, 100],
-    # ]
-    #
-    # res = [
-    # [3, 30, 30, -33],
-    # [4, 40, 40, -44],
-    # [4, 40, 40, -44],
-    # [3, 30, 30, -33],
-    # ]
-    # self.assertEqual(ed.convolution_2d(im, gx), res)
-    #
-
 
 if __name__ == "__main__":
     unittest.main()

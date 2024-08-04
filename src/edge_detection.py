@@ -1,39 +1,40 @@
 # from PIL import Image
 # import numpy as np
+import math as m
 
 
 # Sobel operator
 # Receives grayscale pixel image data
 # Returns edge detected pixel data
 def sobel(im: list[list]) -> list[list]:
-    # gy = [
-    # [-1, -2, -1],
-    # [0, 0, 0],
-    # [1, 2, 1],
-    # ]
+    di, dj = len(im), len(im[0])
 
-    gx = [
+    kx = [
         [-1, 0, 1],
         [-2, 0, 2],
         [-1, 0, 1],
     ]
 
-    return convolution_2d(im, gx)
+    ky = [
+        [-1, -2, -1],
+        [0, 0, 0],
+        [1, 2, 1],
+    ]
 
-    # im[row][column/pixel] === a_ij (like algebra matrix)
-    # im = [
-    # [50, 100, 100, 100, 100],
-    # [50, 50, 100, 100, 100],
-    # [50, 50, 50, 100, 100],
-    # [50, 50, 50, 100, 100],
-    # [50, 50, 50, 100, 100],
-    # ]
+    gx = convolution_2d(im, kx)
+    gy = convolution_2d(im, ky)
+    sobel = [
+        [m.ceil(m.sqrt((gx[i][j] / 9) ** 2 + (gy[i][j] / 9) ** 2)) for j in range(dj)]
+        for i in range(di)
+    ]
+
+    return sobel
 
 
 def convolution_2d(im: list[list], k: list[list]) -> list[list]:
     # Kernel is assumed to be a square, odd side matrix
     k_dim = len(k) // 2
-    res = [[0] * len(im[0])] * len(im)
+    res = [[0] * len(im[0]) for _ in range(len(im))]
     for i in range(len(im)):
         for j in range(len(im[0])):
             # vvvvvv this works because the kernel

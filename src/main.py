@@ -36,6 +36,7 @@ def main():
 
     im = Image.open(argv[1])
     # im = im.resize((im.size[0] // 8, im.size[1] // 8))
+    im = im.resize((im.size[0] // 2, im.size[1] // 2))
 
     #    ascii_im = conv.ascii_to_image(
     #        conv.quantized_to_ascii(
@@ -43,9 +44,11 @@ def main():
     #        )
     #    )
 
-    edges = Image.fromarray(np.array(sobel(conv.rgb_to_grayscale(get_rgb_pixels(im)))))
+    edges = Image.fromarray(
+        np.array(sobel(conv.rgb_to_grayscale(get_rgb_pixels(im))), dtype="uint8")
+    )
 
-    side_by_side(Image.open(argv[1]), edges).save("assets/out.jpg")
+    side_by_side(im, edges).save("assets/out.jpg")
     # side_by_side(Image.open(argv[1]), ascii_im).save("assets/out.jpg")
 
 
