@@ -1,3 +1,4 @@
+import math as m
 import numpy as np
 import PIL.Image as Image
 import PIL.ImageDraw as ImageDraw
@@ -30,6 +31,23 @@ def grayscale_to_3bit(pixels: list[list[int]]) -> list[list[int]]:
 def quantized_to_ascii(pixels: list[list[int]]) -> list[list[str]]:
     chars = ["W", "@", "?", "o", "c", ";", ",", " "]
     return [[chars[i] for i in col] for col in pixels]
+
+
+def quantize_angle(ang: float) -> int:
+    if m.pi / 2 <= ang < (3 * m.pi / 4) or (-3 * m.pi / 4) <= ang <= (-m.pi / 2):
+        return 0
+    if (3 * m.pi / 4) <= ang < (m.pi / 4):
+        return 1
+    if (m.pi / 4) <= ang < (-m.pi / 4):
+        return 2
+    if (-m.pi / 4) <= ang < (-3 * m.pi / 4):
+        return 3
+    return 0
+
+
+def ascii_angles(pixels: list[list[int]]) -> list[list[str]]:
+    chars = ["|", "/", "-", "\\"]
+    return [[chars[quantize_angle(ang)] for ang in col] for col in pixels]
 
 
 def ascii_to_image(ascii: list[list[str]]) -> Image.Image:
