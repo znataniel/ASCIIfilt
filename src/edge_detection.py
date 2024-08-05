@@ -6,7 +6,7 @@ import math as m
 # Sobel operator
 # Receives grayscale pixel image data
 # Returns edge detected pixel data
-def sobel(im: list[list]) -> list[list]:
+def sobel(im: list[list], get_angle=False) -> list[list]:
     di, dj = len(im), len(im[0])
 
     kx = [
@@ -24,11 +24,23 @@ def sobel(im: list[list]) -> list[list]:
     gx = convolution_2d(im, kx)
     gy = convolution_2d(im, ky)
     sobel = [
-        [m.ceil(m.sqrt((gx[i][j] / 9) ** 2 + (gy[i][j] / 9) ** 2)) for j in range(dj)]
+        [
+            rounded_module(gx[i][j] / 9, gy[i][j] / 9)
+            if not get_angle
+            else angle(gx[i][j], gy[i][j])
+            for j in range(dj)
+        ]
         for i in range(di)
     ]
-
     return sobel
+
+
+def angle(a, b):
+    return m.atan(b / a) if a else m.pi / 2
+
+
+def rounded_module(a, b):
+    return m.ceil(m.sqrt(a**2 + b**2))
 
 
 def convolution_2d(im: list[list], k: list[list]) -> list[list]:
