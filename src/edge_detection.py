@@ -10,29 +10,30 @@ def sobel(im: list[list], get_angle=False) -> list[list]:
     di, dj = len(im), len(im[0])
 
     kx = [
-        [-1, 0, 1],
-        [-2, 0, 2],
-        [-1, 0, 1],
+        [-3, 0, 3],
+        [-10, 0, 10],
+        [-3, 0, 3],
     ]
 
     ky = [
-        [-1, -2, -1],
+        [-3, -10, -3],
         [0, 0, 0],
-        [1, 2, 1],
+        [3, 10, 3],
     ]
 
     gx = convolution_2d(im, kx)
     gy = convolution_2d(im, ky)
+    # get_angle = False is to visualize the edges
     sobel = [
-        [
-            rounded_module(gx[i][j] / 9, gy[i][j] / 9)
-            if not get_angle
-            else angle(gx[i][j], gy[i][j])
-            for j in range(dj)
-        ]
+        [threshold(rounded_module(gx[i][j] / 9, gy[i][j] / 9) % 256) for j in range(dj)]
         for i in range(di)
     ]
-    return sobel
+
+    angles = [
+        [angle(gx[i][j], gy[i][j]) if sobel[i][j] else 0 for j in range(dj)]
+        for i in range(di)
+    ]
+    return sobel if not get_angle else angles
 
 
 def angle(a, b):
@@ -41,6 +42,10 @@ def angle(a, b):
 
 def rounded_module(a, b):
     return m.ceil(m.sqrt(a**2 + b**2))
+
+
+def threshold(val: float | int, t=64) -> int:
+    return 255 if val >= t else 0
 
 
 def convolution_2d(im: list[list], k: list[list]) -> list[list]:
