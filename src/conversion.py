@@ -34,13 +34,13 @@ def quantized_to_ascii(pixels: list[list[int]]) -> list[list[str]]:
 
 
 def quantize_angle(ang: float) -> int:
-    if m.pi / 2 <= ang < (3 * m.pi / 4) or (-3 * m.pi / 4) <= ang <= (-m.pi / 2):
+    if m.pi / 2 <= ang < (3 * m.pi / 8) or (-m.pi / 2) <= ang <= (-3 * m.pi / 8):
         return 0
-    if (3 * m.pi / 4) <= ang < (m.pi / 4):
+    if (m.pi / 8) <= ang < (3 * m.pi / 8):
         return 1
-    if (m.pi / 4) <= ang < (-m.pi / 4):
+    if (-m.pi / 8) <= ang < (m.pi / 8):
         return 2
-    if (-m.pi / 4) <= ang < (-3 * m.pi / 4):
+    if (-3 * m.pi / 8) <= ang < (-m.pi / 8):
         return 3
     return 0
 
