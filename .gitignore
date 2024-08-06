@@ -3,3 +3,4 @@ env/
 pyrightconfig.json
 assets/
 *.txt
+!requierements.txt
