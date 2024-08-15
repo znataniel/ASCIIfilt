@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 from PIL import Image
-import conversion as conv
 from sys import argv
-from edge_detection import sobel, box_blur
+
+import src.conversion as conv
+from src.edge_detection import sobel, box_blur
 
 
 def side_by_side(
