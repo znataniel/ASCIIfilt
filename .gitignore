@@ -4,3 +4,5 @@ pyrightconfig.json
 assets/
 *.txt
 !requierements.txt
+*.pdf
+out*
