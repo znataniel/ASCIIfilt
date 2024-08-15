@@ -52,6 +52,14 @@ def ascii_angles(pixels: list[list[int]]) -> list[list[str]]:
     return [[chars[quantize_angle(ang)] for ang in col] for col in pixels]
 
 
+def ascii_overlap(edge_p: list[list], fill_p: list[list]) -> list[list[str]]:
+    rows, cols = len(edge_p), len(edge_p[0])
+    return [
+        [edge_p[i][j] if edge_p[i][j] != " " else fill_p[i][j] for j in range(cols)]
+        for i in range(rows)
+    ]
+
+
 def ascii_to_image(ascii: list[list[str]]) -> Image.Image:
     font_size = 8  # pixels
     h, w = font_size * len(ascii), font_size * len(ascii[0])

@@ -3,8 +3,7 @@
 from PIL import Image
 import conversion as conv
 from sys import argv
-from edge_detection import sobel, gaussian_diff
-import numpy as np
+from edge_detection import sobel, box_blur
 
 
 def side_by_side(
@@ -32,30 +31,12 @@ def main():
 
     im = Image.open(argv[1])
     im = im.resize((im.size[0] // 8, im.size[1] // 8))
-    # im = im.resize((im.size[0] // 2, im.size[1] // 2))
 
-    # ascii_im = conv.ascii_to_image(
-    #     conv.quantized_to_ascii(
-    #         conv.grayscale_to_3bit(conv.rgb_to_grayscale(get_rgb_pixels(im)))
-    #     )
-    # )
-
-    ascii_im = conv.ascii_to_image(
-        conv.ascii_angles(
-            sobel(
-                gaussian_diff(conv.rgb_to_grayscale(get_rgb_pixels(im))), get_angle=True
-            )
-        )
-    )
-
-    # ascii_im = Image.fromarray(
-    # np.array(
-    # sobel(gaussian_diff(conv.rgb_to_grayscale(get_rgb_pixels(im)))),
-    # dtype="uint8",
-    # )
-    # )
-
-    side_by_side(Image.open(argv[1]), ascii_im).save("assets/out.jpg")
+    grayscale = conv.rgb_to_grayscale(get_rgb_pixels(im))
+    ascii_angles = conv.ascii_angles(sobel(box_blur(grayscale), get_angle=True))
+    ascii_fills = conv.quantized_to_ascii(conv.grayscale_to_3bit(grayscale))
+    ascii_im = conv.ascii_to_image(conv.ascii_overlap(ascii_angles, ascii_fills))
+    ascii_im.save("out.jpg")
 
 
 if __name__ == "__main__":
