@@ -1,5 +1,5 @@
 # from PIL import Image
-# import numpy as np
+import numpy as np
 import math as m
 
 
@@ -46,6 +46,12 @@ def rounded_module(a, b):
 
 def threshold(val: float | int, t=64) -> int:
     return 255 if val >= t else 0
+
+
+def box_blur(im: list[list], size=5) -> list[list]:
+    k = [[1 / size**2] * size for _ in range(size)]
+    blur = convolution_2d(im, k)
+    return blur
 
 
 def convolution_2d(im: list[list], k: list[list]) -> list[list]:

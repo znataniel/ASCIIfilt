@@ -1,14 +1,10 @@
-# TO DO
-# EDGE DETECTION!!
-# implement my own resize function
-#   resize images such that the width fits in a regular column of text (~80 characters)
-# implement some unit tests after improving some of the conversion functions
+#!/usr/bin/env python
 
 from PIL import Image
 import conversion as conv
 from sys import argv
-from edge_detection import sobel
-# import numpy as np
+from edge_detection import sobel, gaussian_diff
+import numpy as np
 
 
 def side_by_side(
@@ -46,9 +42,18 @@ def main():
 
     ascii_im = conv.ascii_to_image(
         conv.ascii_angles(
-            sobel(conv.rgb_to_grayscale(get_rgb_pixels(im)), get_angle=True)
+            sobel(
+                gaussian_diff(conv.rgb_to_grayscale(get_rgb_pixels(im))), get_angle=True
+            )
         )
     )
+
+    # ascii_im = Image.fromarray(
+    # np.array(
+    # sobel(gaussian_diff(conv.rgb_to_grayscale(get_rgb_pixels(im)))),
+    # dtype="uint8",
+    # )
+    # )
 
     side_by_side(Image.open(argv[1]), ascii_im).save("assets/out.jpg")
 
