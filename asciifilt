@@ -25,6 +25,11 @@ def get_rgb_pixels(im: Image.Image) -> list[list]:
     return [[im.getpixel((i, j)) for i in range(im.size[0])] for j in range(im.size[1])]
 
 
+def ascii_to_stdout(im: list[list[str]]):
+    for row in im:
+        print("".join(row))
+
+
 def main():
     if len(argv) != 2:
         print("Usage:\t asciifilt path/to/image.ext")
@@ -36,8 +41,10 @@ def main():
     grayscale = conv.rgb_to_grayscale(get_rgb_pixels(im))
     ascii_angles = conv.ascii_angles(sobel(box_blur(grayscale), get_angle=True))
     ascii_fills = conv.quantized_to_ascii(conv.grayscale_to_3bit(grayscale))
-    ascii_im = conv.ascii_to_image(conv.ascii_overlap(ascii_angles, ascii_fills))
+    ascii_overlap = conv.ascii_overlap(ascii_angles, ascii_fills)
+    ascii_im = conv.ascii_to_image(ascii_overlap)
     ascii_im.save("out.jpg")
+    ascii_to_stdout(ascii_overlap)
 
 
 if __name__ == "__main__":
