@@ -4,9 +4,9 @@ Turn any image into ASCII art.
 
 ## Current Results
 
-<img src="./demo.jpg" width="200" />
+<img src="./demo.jpg" width="500" />
 
-<img src="./out.jpg" width="200" />
+<img src="./demo_out.jpg" width="500" />
 
 ## Installation
 
