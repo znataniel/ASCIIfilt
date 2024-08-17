@@ -25,6 +25,12 @@ def get_rgb_pixels(im: Image.Image) -> list[list]:
     return [[im.getpixel((i, j)) for i in range(im.size[0])] for j in range(im.size[1])]
 
 
+def resize_to_std(im: Image.Image) -> Image.Image:
+    std_width = 80
+    k = im.size[0] // 80
+    return im.resize((im.size[0] // k, im.size[1] // k))
+
+
 def ascii_to_stdout(im: list[list[str]]):
     for row in im:
         print("".join(row))
@@ -36,7 +42,8 @@ def main():
         exit(1)
 
     im = Image.open(argv[1])
-    im = im.resize((im.size[0] // 8, im.size[1] // 8))
+    # im = im.resize((im.size[0] // 8, im.size[1] // 8))
+    im = resize_to_std(im)
 
     grayscale = conv.rgb_to_grayscale(get_rgb_pixels(im))
     ascii_angles = conv.ascii_angles(sobel(box_blur(grayscale), get_angle=True))
