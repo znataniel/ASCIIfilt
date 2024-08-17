@@ -2,6 +2,12 @@
 
 Turn any image into ASCII art.
 
+## Current Results
+
+<img src="./demo.jpg" width="200" />
+
+<img src="./out.jpg" width="200" />
+
 ## Installation
 
 The project only depends on NumPy and Python PILLOW to aid
